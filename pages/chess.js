@@ -31,6 +31,19 @@ function makeGame(div) {
   const game = new Chess.Game();
   let gameState = game.exportJson();
 
+  //make an onClick function
+  const onClick = event => {
+    const square = event.target.id;
+    console.log('clicked' + square);
+  }
+
+  //put that onClick function on every square
+  Array.from(
+    board.getElementsByClassName(styles.square)
+  ).forEach(el => {
+    el.onClick = onClick;
+  });
+
   // loop through and update all the squares with a piece on them
   Object.keys(gameState.pieces).forEach(square => {
     // square will be "A1" through "H8"
