@@ -3,7 +3,7 @@
 import styles from '../styles/Chess.module.css';
 
 //importing javascript chess engine from https://github.com/josefjadrny/js-chess-engine
-import jsChessEngine from 'js-chess-engine'
+import * as Chess from 'js-chess-engine';
 
 
 export default function ChessPage() {
@@ -12,39 +12,36 @@ export default function ChessPage() {
   return <div ref={makeGame} />;
 }
 
-function makeGame(div){
-
 // maps js-chess-engine's codes to text chess pieces
 const GLYPHS = {
-    K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
-    k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟︎",
-  };
-  
-  function makeGame(div) {
-    // make a new html <table> to render chess
-    const board = document.createElement('table');
-    board.className = styles.board;
-    fillInBoard(board);
-  
-    // put that table into the div we control
-    div.appendChild(board);
-  
-    // make a new chess game
-    const game = new jsChessEngine.Game()
-    let gameState = game.exportJson();
-  
-    // loop through and update all the squares with a piece on them
-    Object.keys(gameState.pieces).forEach(square => {
-      // square will be "A1" through "H8"
-  
-      // get the html element representing that square
-      const el = document.getElementById(square);
-  
-      // take that piece and put its corresponding glyph into the square
-      const piece = gameState.pieces[square];
-      el.innerText = GLYPHS[piece];
-    });
-  }
+  K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
+  k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟︎",
+};
+
+function makeGame(div) {
+  // make a new html <table> to render chess
+  const board = document.createElement('table');
+  board.className = styles.board;
+  fillInBoard(board);
+
+  // put that table into the div we control
+  div.appendChild(board);
+
+  // make a new chess game
+  const game = new Chess.Game();
+  let gameState = game.exportJson();
+
+  // loop through and update all the squares with a piece on them
+  Object.keys(gameState.pieces).forEach(square => {
+    // square will be "A1" through "H8"
+
+    // get the html element representing that square
+    const el = document.getElementById(square);
+
+    // take that piece and put its corresponding glyph into the square
+    const piece = gameState.pieces[square];
+    el.innerText = GLYPHS[piece];
+  });
 }
   
 // makes a chess board out of an html table
