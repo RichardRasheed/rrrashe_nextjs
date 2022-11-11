@@ -31,11 +31,40 @@ function makeGame(div) {
   const game = new Chess.Game();
   let gameState = game.exportJson();
 
+  // either null or the actively selected square
+  let selected = null;
+
   //make an onClick function
   const onClick = event => {
     const square = event.target.id;
     console.log('clicked' + square);
   }
+
+  // check to see if we are moving a piece
+  if (selected && gameState.moves[selected].includes(square)) {
+    // move the piece
+    game.move(selected, square);
+    gameState = game.exportJson();
+
+
+    // update the text by clearing out the old square
+    document.getElementById(selected).innerText = "";
+    // and putting the piece on the new square
+    document.getElementById(square).innerText = GLYPHS[gameState.pieces[square]];
+
+
+
+    // reset the selection state to unselected
+    selected = null;
+  } else if (selected) {
+    // they tried to move a piece to a random spot on the board
+    return;
+  } else if (gameState.moves[styles.square]) {
+    // clicked on a piece that can move,
+    // set the selection to that piece
+    selected = square;
+  }
+
 
   //put that onClick function on every square
   Array.from(
